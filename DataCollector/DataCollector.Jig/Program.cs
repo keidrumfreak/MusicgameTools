@@ -17,7 +17,7 @@ namespace DataCollector.Jig
             var page = new NewMusicList();
             await page.LoadAsync();
 
-            Console.WriteLine(page.Body.ToString());
+            Console.WriteLine(page.Table.ToString());
         }
     }
 }
