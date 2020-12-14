@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace DataCollector.BemaniWiki.Gitadora
+namespace MusicgameTools.DataCollector.BemaniWiki.Gitadora
 {
     public class Nextage : BemaniWikiPage
     {

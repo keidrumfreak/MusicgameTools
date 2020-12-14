@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DotNetLibraries\CommonLib\CommonLib\CommonLib.csproj" />
-    <ProjectReference Include="..\DataCollector\DataCollector.csproj" />
+    <ProjectReference Include="..\MusicgameTools.DataCollector\MusicgameTools.DataCollector.csproj" />
   </ItemGroup>
 
 </Project>

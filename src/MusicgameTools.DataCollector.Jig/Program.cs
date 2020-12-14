@@ -3,8 +3,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonLib.Net;
 using CommonLib.Net.Http;
-using DataCollector.BemaniWiki;
-using DataCollector.BemaniWiki.Gitadora;
+using MusicgameTools.DataCollector.BemaniWiki;
+using MusicgameTools.DataCollector.BemaniWiki.Gitadora;
 
 namespace DataCollector.Jig
 {

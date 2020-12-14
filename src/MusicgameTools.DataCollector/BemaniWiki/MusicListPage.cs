@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace DataCollector.BemaniWiki
+namespace MusicgameTools.DataCollector.BemaniWiki
 {
     public abstract class MusicListPage<T> : BemaniWikiPage where T : class
     {

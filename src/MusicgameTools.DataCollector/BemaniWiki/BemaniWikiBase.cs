@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using CommonLib.Net.Http;
 
-namespace DataCollector.BemaniWiki
+namespace MusicgameTools.DataCollector.BemaniWiki
 {
     public class BemaniWikiPage : WebPage
     {
