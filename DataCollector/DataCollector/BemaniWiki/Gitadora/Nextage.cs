@@ -7,126 +7,70 @@ using System.Xml.Linq;
 
 namespace DataCollector.BemaniWiki.Gitadora
 {
-    public class Nextage : BemaniWikiBase
+    public class Nextage : BemaniWikiPage
     {
         public Nextage() : base("https://bemaniwiki.com:443/index.php?GITADORA%20NEX%2BAGE") { }
     }
 
-    public class NewMusicList : BemaniWikiBase
+    public abstract class NextageMusicList : MusicListPage<NextageMusicList.Data>
     {
-        public XElement Table { get; private set; }
+        public NextageMusicList(string uri, int tableIndex) : base(uri, tableIndex) { }
 
-        public IEnumerable<Data> Datas { get; private set; }
+        string version;
 
-        public IEnumerable<XElement> InvalidDatas { get; private set; }
-
-        public NewMusicList() : base("https://bemaniwiki.com:443/index.php?GITADORA%20NEX%2BAGE/%B5%EC%B6%CA%A5%EA%A5%B9%A5%C8%28%A1%C1XG3%29") { }
-
-        public override async Task LoadAsync()
+        protected override void AddData(string[] rawData)
         {
-            await base.LoadAsync();
-
-            var ns = Content.Root.Name.Namespace;
-
-            Table = Body.Descendants(ns + "table").Where(elem => elem.Attribute("class")?.Value == "style_table").ElementAt(1);
-
-            var datas = new List<Data>();
-            var invalidDatas = new List<XElement>();
-
-            var version = string.Empty;
-            var artist = string.Empty;
-            var movie = string.Empty;
-            var bpm = string.Empty;
-            var time = string.Empty;
-            foreach (var elem in Table.Element(ns + "tbody").Elements(ns + "tr"))
+            if (rawData.Length == 1)
             {
-                try
-                {
-                    var tmp = elem.Elements(ns + "td").Select(e => e.Value).ToArray();
-                    if (tmp.Length == 1)
-                    {
-                        version = tmp[0];
-                        continue;
-                    }
-
-                    if (tmp.Length == 14)
-                    {
-                        // CLASSIC譜面
-                        var d = new Data
-                        {
-                            Version = version,
-                            MusicName = tmp[1],
-                            Artist = artist,
-                            Movie = movie,
-                            Bpm = bpm,
-                            Time = time,
-                            DrumBsc = tmp[2],
-                            DrumAdv = tmp[3],
-                            DrumExt = tmp[4],
-                            DrumMas = tmp[5],
-                            GuitarBsc = tmp[6],
-                            GuitarAdv = tmp[7],
-                            GuitarExt = tmp[8],
-                            GuitarMas = tmp[9],
-                            BaseBsc = tmp[10],
-                            BaseAdv = tmp[11],
-                            BaseExt = tmp[12],
-                            BaseMas = tmp[13],
-                        };
-                        datas.Add(d);
-                        continue;
-                    }
-
-                    // TODO: 天体観測 (CLASSIC), Predator's Crypto Pt.2対応
-
-                    if (tmp.Length != 18)
-                    {
-                        invalidDatas.Add(elem);
-                        continue;
-                    }
-
-                    var data = new Data
-                    {
-                        Version = version,
-                        MusicName = tmp[1],
-                        Artist = tmp[2],
-                        Movie = tmp[3],
-                        Bpm = tmp[4],
-                        Time = tmp[5],
-                        DrumBsc = tmp[6],
-                        DrumAdv = tmp[7],
-                        DrumExt = tmp[8],
-                        DrumMas = tmp[9],
-                        GuitarBsc = tmp[10],
-                        GuitarAdv = tmp[11],
-                        GuitarExt = tmp[12],
-                        GuitarMas = tmp[13],
-                        BaseBsc = tmp[14],
-                        BaseAdv = tmp[15],
-                        BaseExt = tmp[16],
-                        BaseMas = tmp[17],
-                    };
-
-                    artist = data.Artist;
-                    movie = data.Movie;
-                    bpm = data.Bpm;
-                    time = data.Time;
-
-                    datas.Add(data);
-                }
-                catch
-                {
-                    invalidDatas.Add(elem);
-                }
+                version = rawData[0];
+                return;
             }
 
-            Datas = datas;
-            InvalidDatas = invalidDatas;
+            var data = ParseData(rawData);
+            if (data == null)
+            {
+                invalidDatas.Add(rawData);
+                return;
+            }
+
+            // 新曲リスト以外の場合バージョンをここで入れる
+            if (string.IsNullOrEmpty(data.Version))
+                data.Version = version;
+
+            datas.Add(data);
         }
 
+        protected virtual Data ParseData(string[] rawData)
+        {
+            if (rawData.Length != 18)
+                return null;
+
+            return new Data
+            {
+                MusicName = rawData[1],
+                Artist = rawData[2],
+                Movie = rawData[3],
+                Bpm = rawData[4],
+                Time = rawData[5],
+                DrumBsc = rawData[6],
+                DrumAdv = rawData[7],
+                DrumExt = rawData[8],
+                DrumMas = rawData[9],
+                GuitarBsc = rawData[10],
+                GuitarAdv = rawData[11],
+                GuitarExt = rawData[12],
+                GuitarMas = rawData[13],
+                BaseBsc = rawData[14],
+                BaseAdv = rawData[15],
+                BaseExt = rawData[16],
+                BaseMas = rawData[17],
+            };
+        }
+        
         public class Data
         {
             public string Version { get; set; }
+            public string Event { get; set; }
             public string MusicName { get; set; }
             public string Artist { get; set; }
             public string Movie { get; set; }
@@ -147,13 +91,112 @@ namespace DataCollector.BemaniWiki.Gitadora
         }
     }
 
-    public class ClassicMusicList : BemaniWikiBase
+    public class ClassicMusicList : NextageMusicList
     {
-        public ClassicMusicList() : base("https://bemaniwiki.com:443/index.php?GITADORA%20NEX%2BAGE/%A5%CE%A1%BC%A5%C8%BF%F4%A5%EA%A5%B9%A5%C8%28%A1%C1XG3%29") { }
+        public ClassicMusicList() : base("https://bemaniwiki.com:443/index.php?GITADORA%20NEX%2BAGE/%B5%EC%B6%CA%A5%EA%A5%B9%A5%C8%28%A1%C1XG3%29", 1) { }
+
+        protected override Data ParseData(string[] rawData)
+        {
+            var data = base.ParseData(rawData);
+            if (data != null)
+                return data;
+
+            var last = datas.Last();
+
+            if (rawData.Length == 14)
+            {
+                // CLASSIC譜面
+                return new Data
+                {
+                    MusicName = rawData[1],
+                    Artist = last.Artist,
+                    Movie = last.Movie,
+                    Bpm = last.Bpm,
+                    Time = last.Time,
+                    DrumBsc = rawData[2],
+                    DrumAdv = rawData[3],
+                    DrumExt = rawData[4],
+                    DrumMas = rawData[5],
+                    GuitarBsc = rawData[6],
+                    GuitarAdv = rawData[7],
+                    GuitarExt = rawData[8],
+                    GuitarMas = rawData[9],
+                    BaseBsc = rawData[10],
+                    BaseAdv = rawData[11],
+                    BaseExt = rawData[12],
+                    BaseMas = rawData[13],
+                };
+            }
+
+            if (rawData.Length == 13)
+            {
+                // 天体観測 (CLASSIC)
+                return new Data
+                {
+                    MusicName = rawData[0],
+                    Artist = last.Artist,
+                    Movie = last.Movie,
+                    Bpm = last.Bpm,
+                    Time = last.Time,
+                    DrumBsc = rawData[1],
+                    DrumAdv = rawData[2],
+                    DrumExt = rawData[3],
+                    DrumMas = rawData[4],
+                    GuitarBsc = rawData[5],
+                    GuitarAdv = rawData[6],
+                    GuitarExt = rawData[7],
+                    GuitarMas = rawData[8],
+                    BaseBsc = rawData[9],
+                    BaseAdv = rawData[10],
+                    BaseExt = rawData[11],
+                    BaseMas = rawData[12],
+                };
+            }
+
+            if (rawData.Length == 15)
+            {
+                // Predator's Crypto Pt.2
+                return new Data
+                {
+                    MusicName = rawData[1],
+                    Artist = last.Artist,
+                    Movie = last.Movie,
+                    Bpm = last.Bpm,
+                    Time = rawData[2],
+                    DrumBsc = rawData[3],
+                    DrumAdv = rawData[4],
+                    DrumExt = rawData[5],
+                    DrumMas = rawData[6],
+                    GuitarBsc = rawData[7],
+                    GuitarAdv = rawData[8],
+                    GuitarExt = rawData[9],
+                    GuitarMas = rawData[10],
+                    BaseBsc = rawData[11],
+                    BaseAdv = rawData[12],
+                    BaseExt = rawData[13],
+                    BaseMas = rawData[14],
+                };
+            }
+
+            return null;
+        }
     }
 
-    public class OldMusicList : BemaniWikiBase
+    public class NewMusicList : NextageMusicList
     {
-        public OldMusicList() : base("https://bemaniwiki.com:443/index.php?GITADORA%20NEX%2BAGE/%A5%CE%A1%BC%A5%C8%BF%F4%A5%EA%A5%B9%A5%C8%28GITADORA%A1%C1%29") { }
+        public NewMusicList() : base("https://bemaniwiki.com:443/index.php?GITADORA%20NEX%2BAGE/%BF%B7%B6%CA%A5%EA%A5%B9%A5%C8", 0) { }
+
+        protected override Data ParseData(string[] rawData)
+        {
+            var data = base.ParseData(rawData);
+            data.Event = data.Version;
+            data.Version = "GITADORA NEX+AGE";
+            return data;
+        }
+    }
+
+    public class OldMusicList : NextageMusicList
+    {
+        public OldMusicList() : base("https://bemaniwiki.com:443/index.php?GITADORA%20NEX%2BAGE/%B5%EC%B6%CA%A5%EA%A5%B9%A5%C8%28GITADORA%A1%C1%29", 1) { }
     }
 }

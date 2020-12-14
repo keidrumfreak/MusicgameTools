@@ -8,21 +8,19 @@ using CommonLib.Net.Http;
 
 namespace DataCollector.BemaniWiki
 {
-    public class BemaniWikiBase : WebPage
+    public class BemaniWikiPage : WebPage
     {
         public XElement Body { get; private set; }
 
-        public BemaniWikiBase() : base("https://bemaniwiki.com") { }
+        public BemaniWikiPage() : base("https://bemaniwiki.com") { }
 
-        protected BemaniWikiBase(string uri) : base(uri) { }
+        protected BemaniWikiPage(string uri) : base(uri) { }
 
         public override async Task LoadAsync()
         {
             await base.LoadAsync();
 
-            var ns = Content.Root.Name.Namespace;
-
-            Body = Content.Descendants(ns + "div").FirstOrDefault(elem => elem.Attribute("id")?.Value == "body");
+            Body = Content.Descendants(Namespace + "div").FirstOrDefault(elem => elem.Attribute("id")?.Value == "body");
         }
     }
 }
