@@ -8,7 +8,7 @@ using CommonLib.Net.Http;
 
 namespace MusicgameTools.DataCollector.BemaniWiki
 {
-    public class BemaniWikiPage : WebPage
+    public class BemaniWikiPage : HtmlDocument
     {
         public XElement Body { get; private set; }
 

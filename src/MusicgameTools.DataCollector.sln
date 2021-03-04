@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicgameTools.DataCollecto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicgameTools.DataCollector.Jig", "MusicgameTools.DataCollector.Jig\MusicgameTools.DataCollector.Jig.csproj", "{899116C8-1543-4B91-A6B4-64DD6B82BABB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{9B441952-1BD3-4312-9772-A44DB9A1C146}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib.TestHelper", "..\DotNetLibraries\CommonLib\CommonLib.TestHelper\CommonLib.TestHelper.csproj", "{65B6A51F-B006-40BC-B5B7-A7AB09B19097}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicgameTools.DataCollector.Tests", "MusicgameTools.DataCollector.Tests\MusicgameTools.DataCollector.Tests.csproj", "{B02722E7-5D96-402B-87BF-3EFE8E9DD809}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +33,21 @@ Global
 		{899116C8-1543-4B91-A6B4-64DD6B82BABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899116C8-1543-4B91-A6B4-64DD6B82BABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{899116C8-1543-4B91-A6B4-64DD6B82BABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B6A51F-B006-40BC-B5B7-A7AB09B19097}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B6A51F-B006-40BC-B5B7-A7AB09B19097}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B6A51F-B006-40BC-B5B7-A7AB09B19097}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B6A51F-B006-40BC-B5B7-A7AB09B19097}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B02722E7-5D96-402B-87BF-3EFE8E9DD809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B02722E7-5D96-402B-87BF-3EFE8E9DD809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B02722E7-5D96-402B-87BF-3EFE8E9DD809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B02722E7-5D96-402B-87BF-3EFE8E9DD809}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{65B6A51F-B006-40BC-B5B7-A7AB09B19097} = {9B441952-1BD3-4312-9772-A44DB9A1C146}
+		{B02722E7-5D96-402B-87BF-3EFE8E9DD809} = {9B441952-1BD3-4312-9772-A44DB9A1C146}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {21D04340-4EC7-4B3F-859D-84E668968695}

@@ -14,8 +14,13 @@ namespace DataCollector.Jig
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            var page = new NewMusicList();
-            await page.LoadAsync();
+            var page = new Nextage();
+            var musicList = await page.LoadMusicDataAsync();
+
+            foreach (var music in musicList)
+            {
+                Console.WriteLine(music);
+            }
 
             Console.WriteLine(page.ToString());
         }
